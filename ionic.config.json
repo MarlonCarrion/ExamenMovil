@@ -1,5 +1,7 @@
 {
   "name": "crudEmpleado",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
