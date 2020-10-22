@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Gestión Empleados
+      Gestión Usuarios
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,50 +14,44 @@
     </ion-button>
 
     <ion-button expand="block" (click)="getUsuario()">
-      Listar Empleados
+      Listar Usuarios
     </ion-button>
   </ion-card>
-
   <ion-card>
     <ion-item-divider>
-      <ion-input placeholder="Enter Cedula" [(ngModel)]="cedula_model"></ion-input>
+      <ion-input placeholder="Enter Id" [(ngModel)]="id_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Nombres" [(ngModel)]="nombres_model"></ion-input>
+      <ion-input placeholder="Enter Nombre" [(ngModel)]="nick_model"></ion-input>
     </ion-item-divider>
     
     <ion-item-divider>
-      <ion-input placeholder="Enter Apellido" [(ngModel)]="apellidos_model"></ion-input>
+      <ion-input placeholder="Enter Clave" [(ngModel)]="clave_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Fecha" [(ngModel)]="fecha_contrato_model"></ion-input>
-    </ion-item-divider>
-    
-    <ion-item-divider>
-      <ion-input placeholder="Enter Salario" [(ngModel)]="salario_model"></ion-input>
+      <ion-input placeholder="Enter Permiso" [(ngModel)]="permiso_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Discapacidad" [(ngModel)]="discapacidad_model"></ion-input>
+      <ion-button (click)="getPicture()">
+        Capture Image
+      </ion-button>
+      <ion-card>
+        <img [src]="image" *ngIf="image">
+      </ion-card>   
     </ion-item-divider>
-    
-    <ion-item-divider>
-      <ion-input placeholder="Enter Horario" [(ngModel)]="horario_model"></ion-input>
-    </ion-item-divider>
-    
-    
-
+  
     <ng-container *ngIf="updateActive; else elseTemplateUpdate">
       <ion-button expand="block" (click)="updateRow()" >
-        Update User
+        Update Usuario
       </ion-button>
     </ng-container>
 
     <ng-template #elseTemplateUpdate>
       <ion-button expand="block" (click)="insertUser()">
-        Insert User
+        Insert Usuario
       </ion-button>
     </ng-template>
 
@@ -66,38 +60,35 @@
   <ion-grid>
     <ion-card *ngFor="let item of row_data">
       <ion-row>
-        <ion-col size="5">Cédula:</ion-col>
-        <ion-col size="7">{{item.cedula}}</ion-col>
+        <ion-col size="5">Id:</ion-col>
+        <ion-col size="7">{{item.id}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Nombres:</ion-col>
-        <ion-col size="7">{{item.nombres}}</ion-col>
+        <ion-col size="5">Nombre:</ion-col>
+        <ion-col size="7">{{item.nick}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Apellidos:</ion-col>
-        <ion-col size="7">{{item.apellidos}}</ion-col>
+        <ion-col size="5">Clave:</ion-col>
+        <ion-col size="7">{{item.clave}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Fecha Contrato:</ion-col>
-        <ion-col size="7">{{item.fecha_contrato}}</ion-col>
-      </ion-row>
-    
-      <ion-row>
-        <ion-col size="5">Salario:</ion-col>
-        <ion-col size="7">{{item.salario}}</ion-col>
+        <ion-col size="5">Permiso:</ion-col>
+        <ion-col size="7">{{item.permiso}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Discapacidad:</ion-col>
-        <ion-col size="7">{{item.discapacidad}}</ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="5">Horario:</ion-col>
-        <ion-col size="7">{{item.horario}}</ion-col>
+        <ion-col size="5">
+          Imagen:
+        </ion-col>
+        <ion-col size="7">
+          <ion-avatar>
+            <img [src]="item.imagen">
+          </ion-avatar>
+        </ion-col>
+        
       </ion-row>
 
       <ion-row>

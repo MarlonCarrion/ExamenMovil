@@ -1,25 +1,27 @@
-import { Component } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { SQLiteObject, SQLite } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-producto',
+  templateUrl: './producto.page.html',
+  styleUrls: ['./producto.page.scss'],
 })
-export class HomePage {
+export class ProductoPage{
   databaseObj: SQLiteObject;
 
-  cedula_model: string = "";
-  nombres_model: string = "";
-  apellidos_model: string = "";
-  fecha_contrato_model: string = "";
-  salario_model: number = 0;
-  discapacidad_model: string = "";
-  horario_model: string = "";
+  codigo_model: string = "";
+  nombre_model: string = "";
+  descripcion_model: string = "";
+  costo_model: number;
+  precio_model: number;
+  stock_model: string = "";
+  fecha_model: string = "";
   row_data: any = [];
   readonly database_name: string = "supermercado.db";
-  readonly table_name: string = "empleados";
+  readonly table_name: string = "productos";
+
 
   // Handle Update Row Operation
   updateActive: boolean;
@@ -27,7 +29,7 @@ export class HomePage {
   constructor(private platform: Platform, private sqlite: SQLite) { 
     this.platform.ready().then(() => {
       this.createDB();
-      
+      this.createTable();
     }).catch(error => {
       console.log(error);
     });
@@ -49,8 +51,8 @@ export class HomePage {
   // Create table empleados
   createTable() {
     this.databaseObj.executeSql(`
-  CREATE TABLE IF NOT EXISTS ${this.table_name}  (cedula varchar(255) PRIMARY KEY, nombres varchar(255), apellidos varchar(255), 
-  fecha_contrato varchar(255), salario integer, discapacidad varchar(255), horario varchar(255))
+  CREATE TABLE IF NOT EXISTS ${this.table_name}  (codigo varchar(255) PRIMARY KEY, nombre varchar(255), descripcion varchar(255), 
+  costo integer, precio integer, stock integer, fecha varchar(255))
   `, [])
       .then(() => {
         alert('Tabla creada');
@@ -63,18 +65,18 @@ export class HomePage {
   insertUser() {
     // Value should not be empty
     // Miss implement order to other inputs
-    if (!this.cedula_model.length) {
+    if (!this.codigo_model.length) {
       alert("Enter CI");
       return;
     }
 
     this.databaseObj.executeSql(`
-      INSERT INTO ${this.table_name} (cedula, nombres, apellidos, fecha_contrato, salario, discapacidad, horario) VALUES ('${this.cedula_model}' , 
-      '${this.nombres_model}', '${this.apellidos_model}', '${this.fecha_contrato_model}', '${this.salario_model}', '${this.discapacidad_model}', 
-      '${this.horario_model}')
+      INSERT INTO ${this.table_name} (codigo, nombre, descripcion, costo, precio, stock, fecha) VALUES ('${this.codigo_model}' , 
+      '${this.nombre_model}', '${this.descripcion_model}', '${this.costo_model}', '${this.precio_model}', '${this.stock_model}', 
+      '${this.fecha_model}')
     `, [])
       .then(() => {
-        alert('Usuario Creado!');
+        alert('Producto Creado!');
         this.getUsuario();
       })
       .catch(e => {
@@ -97,7 +99,7 @@ export class HomePage {
   }
   deleteRow(item) {
     this.databaseObj.executeSql(`
-      DELETE FROM ${this.table_name} WHERE cedula = '${item.cedula}'
+      DELETE FROM ${this.table_name} WHERE codigo = '${item.codigo}'
     `
       , [])
       .then((res) => {
@@ -112,21 +114,21 @@ export class HomePage {
     this.updateActive = true;
     this.to_update_item = item;
 
-    this.cedula_model = item.cedula;
-    this.nombres_model = item.nombres;
-    this.apellidos_model = item.apellidos;
-    this.fecha_contrato_model = item.fecha_contrato;
-    this.salario_model = item.salario;
-    this.discapacidad_model = item.discapacidad;
-    this.horario_model = item.horario;
+    this.codigo_model = item.codigo;
+    this.nombre_model = item.nombre;
+    this.descripcion_model = item.descripcion;
+    this.costo_model = item.costo;
+    this.precio_model = item.precio;
+    this.stock_model = item.stock;
+    this.fecha_model = item.fecha;
   }
   // Update row with saved row id
   updateRow() {
     this.databaseObj.executeSql(`
     UPDATE ${this.table_name}
-    SET nombres = '${this.nombres_model}', apellidos ='${this.apellidos_model}', fecha_contrato = '${this.fecha_contrato_model}', salario = '${this.salario_model}', 
-    discapacidad = '${this.discapacidad_model}', horario = '${this.horario_model}'
-    WHERE cedula = '${this.to_update_item.cedula}'`, [])
+    SET nombre = '${this.nombre_model}', descripcion ='${this.descripcion_model}', costo = '${this.costo_model}', precio = '${this.precio_model}', 
+    stock = '${this.stock_model}', fecha = '${this.fecha_model}'
+    WHERE codigo = '${this.to_update_item.codigo}'`, [])
       .then(() => {
         alert('Row Updated!');
         this.updateActive = false;
@@ -136,4 +138,5 @@ export class HomePage {
         alert("error " + JSON.stringify(e))
       });
   }
+
 }

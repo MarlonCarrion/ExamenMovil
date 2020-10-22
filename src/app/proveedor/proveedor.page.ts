@@ -1,25 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SQLiteObject, SQLite } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-proveedor',
+  templateUrl: './proveedor.page.html',
+  styleUrls: ['./proveedor.page.scss'],
 })
-export class HomePage {
+export class ProveedorPage {
   databaseObj: SQLiteObject;
 
-  cedula_model: string = "";
-  nombres_model: string = "";
-  apellidos_model: string = "";
-  fecha_contrato_model: string = "";
-  salario_model: number = 0;
-  discapacidad_model: string = "";
-  horario_model: string = "";
+  ruc_model: string = "";
+  nombre_model: string = "";
+  legal_model: string = "";
+  direccion_model: string = "";
+  telefono_model: string="";
+  credito_model:number;
   row_data: any = [];
   readonly database_name: string = "supermercado.db";
-  readonly table_name: string = "empleados";
+  readonly table_name: string = "proveedores";
 
   // Handle Update Row Operation
   updateActive: boolean;
@@ -32,6 +31,7 @@ export class HomePage {
       console.log(error);
     });
   }
+  
   //Create the database 
   createDB() {
     this.sqlite.create({
@@ -46,11 +46,12 @@ export class HomePage {
         alert("error" + JSON.stringify(e))
       });
   }
+
   // Create table empleados
   createTable() {
     this.databaseObj.executeSql(`
-  CREATE TABLE IF NOT EXISTS ${this.table_name}  (cedula varchar(255) PRIMARY KEY, nombres varchar(255), apellidos varchar(255), 
-  fecha_contrato varchar(255), salario integer, discapacidad varchar(255), horario varchar(255))
+  CREATE TABLE IF NOT EXISTS ${this.table_name}  (ruc varchar(255) PRIMARY KEY, nombre varchar(255), legal varchar(255), 
+  direccion varchar(255), telefono varchar(255), credito integer)
   `, [])
       .then(() => {
         alert('Tabla creada');
@@ -63,18 +64,17 @@ export class HomePage {
   insertUser() {
     // Value should not be empty
     // Miss implement order to other inputs
-    if (!this.cedula_model.length) {
+    if (!this.ruc_model.length) {
       alert("Enter CI");
       return;
     }
 
     this.databaseObj.executeSql(`
-      INSERT INTO ${this.table_name} (cedula, nombres, apellidos, fecha_contrato, salario, discapacidad, horario) VALUES ('${this.cedula_model}' , 
-      '${this.nombres_model}', '${this.apellidos_model}', '${this.fecha_contrato_model}', '${this.salario_model}', '${this.discapacidad_model}', 
-      '${this.horario_model}')
+      INSERT INTO ${this.table_name} (ruc, nombre, legal, direccion, telefono, credito) VALUES ('${this.ruc_model}' , 
+      '${this.nombre_model}', '${this.legal_model}', '${this.direccion_model}', '${this.telefono_model}', '${this.credito_model}')
     `, [])
       .then(() => {
-        alert('Usuario Creado!');
+        alert('Proveedor Creado!');
         this.getUsuario();
       })
       .catch(e => {
@@ -97,7 +97,7 @@ export class HomePage {
   }
   deleteRow(item) {
     this.databaseObj.executeSql(`
-      DELETE FROM ${this.table_name} WHERE cedula = '${item.cedula}'
+      DELETE FROM ${this.table_name} WHERE ruc = '${item.ruc}'
     `
       , [])
       .then((res) => {
@@ -112,21 +112,20 @@ export class HomePage {
     this.updateActive = true;
     this.to_update_item = item;
 
-    this.cedula_model = item.cedula;
-    this.nombres_model = item.nombres;
-    this.apellidos_model = item.apellidos;
-    this.fecha_contrato_model = item.fecha_contrato;
-    this.salario_model = item.salario;
-    this.discapacidad_model = item.discapacidad;
-    this.horario_model = item.horario;
+    this.ruc_model = item.ruc;
+    this.nombre_model = item.nombre;
+    this.legal_model = item.legal;
+    this.direccion_model = item.direccion;
+    this.telefono_model = item.telefono;
+    this.credito_model = item.credito;
   }
   // Update row with saved row id
   updateRow() {
     this.databaseObj.executeSql(`
     UPDATE ${this.table_name}
-    SET nombres = '${this.nombres_model}', apellidos ='${this.apellidos_model}', fecha_contrato = '${this.fecha_contrato_model}', salario = '${this.salario_model}', 
-    discapacidad = '${this.discapacidad_model}', horario = '${this.horario_model}'
-    WHERE cedula = '${this.to_update_item.cedula}'`, [])
+    SET nombre = '${this.nombre_model}', legal ='${this.legal_model}', direccion = '${this.direccion_model}', telefono = '${this.telefono_model}', 
+    credito = '${this.credito_model}'
+    WHERE ruc = '${this.to_update_item.ruc}'`, [])
       .then(() => {
         alert('Row Updated!');
         this.updateActive = false;

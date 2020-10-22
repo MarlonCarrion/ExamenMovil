@@ -1,30 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SQLiteObject, SQLite } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-usuario',
+  templateUrl: './usuario.page.html',
+  styleUrls: ['./usuario.page.scss'],
 })
-export class HomePage {
+export class UsuarioPage {
   databaseObj: SQLiteObject;
 
-  cedula_model: string = "";
-  nombres_model: string = "";
-  apellidos_model: string = "";
-  fecha_contrato_model: string = "";
-  salario_model: number = 0;
-  discapacidad_model: string = "";
-  horario_model: string = "";
+  id_model: string = "";
+  nick_model: string = "";
+  clave_model: string = "";
+  permiso_model: string = "";
   row_data: any = [];
   readonly database_name: string = "supermercado.db";
-  readonly table_name: string = "empleados";
+  readonly table_name: string = "usuarios_1";
+  image : string = "";
 
   // Handle Update Row Operation
   updateActive: boolean;
   to_update_item: any;
-  constructor(private platform: Platform, private sqlite: SQLite) { 
+  constructor(private platform: Platform, private sqlite: SQLite, private camera: Camera) { 
     this.platform.ready().then(() => {
       this.createDB();
       
@@ -46,11 +45,12 @@ export class HomePage {
         alert("error" + JSON.stringify(e))
       });
   }
+  
   // Create table empleados
   createTable() {
     this.databaseObj.executeSql(`
-  CREATE TABLE IF NOT EXISTS ${this.table_name}  (cedula varchar(255) PRIMARY KEY, nombres varchar(255), apellidos varchar(255), 
-  fecha_contrato varchar(255), salario integer, discapacidad varchar(255), horario varchar(255))
+  CREATE TABLE IF NOT EXISTS ${this.table_name}  (id varchar(255) PRIMARY KEY, nick varchar(255), clave varchar(255), 
+  permiso varchar(255), imagen varchar)
   `, [])
       .then(() => {
         alert('Tabla creada');
@@ -63,15 +63,14 @@ export class HomePage {
   insertUser() {
     // Value should not be empty
     // Miss implement order to other inputs
-    if (!this.cedula_model.length) {
+    if (!this.id_model.length) {
       alert("Enter CI");
       return;
     }
 
     this.databaseObj.executeSql(`
-      INSERT INTO ${this.table_name} (cedula, nombres, apellidos, fecha_contrato, salario, discapacidad, horario) VALUES ('${this.cedula_model}' , 
-      '${this.nombres_model}', '${this.apellidos_model}', '${this.fecha_contrato_model}', '${this.salario_model}', '${this.discapacidad_model}', 
-      '${this.horario_model}')
+      INSERT INTO ${this.table_name} (id, nick, clave, permiso, imagen) VALUES ('${this.id_model}' , 
+      '${this.nick_model}', '${this.clave_model}', '${this.permiso_model}', '${this.image}')
     `, [])
       .then(() => {
         alert('Usuario Creado!');
@@ -97,7 +96,7 @@ export class HomePage {
   }
   deleteRow(item) {
     this.databaseObj.executeSql(`
-      DELETE FROM ${this.table_name} WHERE cedula = '${item.cedula}'
+      DELETE FROM ${this.table_name} WHERE id = '${item.id}'
     `
       , [])
       .then((res) => {
@@ -112,21 +111,18 @@ export class HomePage {
     this.updateActive = true;
     this.to_update_item = item;
 
-    this.cedula_model = item.cedula;
-    this.nombres_model = item.nombres;
-    this.apellidos_model = item.apellidos;
-    this.fecha_contrato_model = item.fecha_contrato;
-    this.salario_model = item.salario;
-    this.discapacidad_model = item.discapacidad;
-    this.horario_model = item.horario;
+    this.id_model = item.id;
+    this.nick_model = item.nick;
+    this.clave_model = item.clave;
+    this.permiso_model = item.permiso;
+    this.image = item.imagen;
   }
   // Update row with saved row id
   updateRow() {
     this.databaseObj.executeSql(`
     UPDATE ${this.table_name}
-    SET nombres = '${this.nombres_model}', apellidos ='${this.apellidos_model}', fecha_contrato = '${this.fecha_contrato_model}', salario = '${this.salario_model}', 
-    discapacidad = '${this.discapacidad_model}', horario = '${this.horario_model}'
-    WHERE cedula = '${this.to_update_item.cedula}'`, [])
+    SET nick = '${this.nick_model}', clave ='${this.clave_model}', permiso = '${this.permiso_model}', imagen = '${this.image}'
+    WHERE id = '${this.to_update_item.id}'`, [])
       .then(() => {
         alert('Row Updated!');
         this.updateActive = false;
@@ -134,6 +130,22 @@ export class HomePage {
       })
       .catch(e => {
         alert("error " + JSON.stringify(e))
+      });
+  }
+  getPicture() {
+    let options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    this.camera.getPicture(options)
+      .then(imageData => {
+        this.image = `data:image/jpeg;base64,${imageData}`;
+             
+      })
+      .catch(error => {
+        console.error(error);
       });
   }
 }

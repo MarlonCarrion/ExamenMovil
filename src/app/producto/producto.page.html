@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Gestión Empleados
+      Gestión Productos
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,50 +14,50 @@
     </ion-button>
 
     <ion-button expand="block" (click)="getUsuario()">
-      Listar Empleados
+      Listar Productos
     </ion-button>
   </ion-card>
 
   <ion-card>
     <ion-item-divider>
-      <ion-input placeholder="Enter Cedula" [(ngModel)]="cedula_model"></ion-input>
+      <ion-input placeholder="Enter Codigo" [(ngModel)]="codigo_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Nombres" [(ngModel)]="nombres_model"></ion-input>
+      <ion-input placeholder="Enter Nombre" [(ngModel)]="nombre_model"></ion-input>
     </ion-item-divider>
     
     <ion-item-divider>
-      <ion-input placeholder="Enter Apellido" [(ngModel)]="apellidos_model"></ion-input>
+      <ion-input placeholder="Enter Descripción" [(ngModel)]="descripcion_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Fecha" [(ngModel)]="fecha_contrato_model"></ion-input>
+      <ion-input placeholder="Enter Costo" [(ngModel)]="costo_model"></ion-input>
     </ion-item-divider>
     
     <ion-item-divider>
-      <ion-input placeholder="Enter Salario" [(ngModel)]="salario_model"></ion-input>
+      <ion-input placeholder="Enter Precio" [(ngModel)]="precio_model"></ion-input>
     </ion-item-divider>
 
     <ion-item-divider>
-      <ion-input placeholder="Enter Discapacidad" [(ngModel)]="discapacidad_model"></ion-input>
+      <ion-input placeholder="Enter Stock" [(ngModel)]="stock_model"></ion-input>
     </ion-item-divider>
     
     <ion-item-divider>
-      <ion-input placeholder="Enter Horario" [(ngModel)]="horario_model"></ion-input>
+      <ion-input placeholder="Enter Fecha" [(ngModel)]="fecha_model"></ion-input>
     </ion-item-divider>
     
     
 
     <ng-container *ngIf="updateActive; else elseTemplateUpdate">
       <ion-button expand="block" (click)="updateRow()" >
-        Update User
+        Update Producto
       </ion-button>
     </ng-container>
 
     <ng-template #elseTemplateUpdate>
       <ion-button expand="block" (click)="insertUser()">
-        Insert User
+        Insert Producto
       </ion-button>
     </ng-template>
 
@@ -66,38 +66,38 @@
   <ion-grid>
     <ion-card *ngFor="let item of row_data">
       <ion-row>
-        <ion-col size="5">Cédula:</ion-col>
-        <ion-col size="7">{{item.cedula}}</ion-col>
+        <ion-col size="5">Código:</ion-col>
+        <ion-col size="7">{{item.codigo}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Nombres:</ion-col>
-        <ion-col size="7">{{item.nombres}}</ion-col>
+        <ion-col size="5">Nombre:</ion-col>
+        <ion-col size="7">{{item.nombre}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Apellidos:</ion-col>
-        <ion-col size="7">{{item.apellidos}}</ion-col>
+        <ion-col size="5">Descripción:</ion-col>
+        <ion-col size="7">{{item.descripcion}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Fecha Contrato:</ion-col>
-        <ion-col size="7">{{item.fecha_contrato}}</ion-col>
+        <ion-col size="5">Costo:</ion-col>
+        <ion-col size="7">{{item.costo}}</ion-col>
       </ion-row>
     
       <ion-row>
-        <ion-col size="5">Salario:</ion-col>
-        <ion-col size="7">{{item.salario}}</ion-col>
+        <ion-col size="5">Precio:</ion-col>
+        <ion-col size="7">{{item.precio}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Discapacidad:</ion-col>
-        <ion-col size="7">{{item.discapacidad}}</ion-col>
+        <ion-col size="5">Stock:</ion-col>
+        <ion-col size="7">{{item.stock}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size="5">Horario:</ion-col>
-        <ion-col size="7">{{item.horario}}</ion-col>
+        <ion-col size="5">Fecha:</ion-col>
+        <ion-col size="7">{{item.fecha}}</ion-col>
       </ion-row>
 
       <ion-row>
